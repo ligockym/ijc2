@@ -1,0 +1,59 @@
+#!/bin/bash
+# Test na 2. projekt IJC
+# ligockym, Ondroid (kostra)
+# 2021-04-15
+
+tests="test-cases/*"
+
+RED='WRONG \033[0;31m'
+GREEN='OK \033[0;32m'
+DIM='\e[2m'
+NOCOLOR='\033[0m'
+TICK='\u2713'
+CROSS='\u2717'
+
+verbose=""
+[ "$1" ] && [ "$1" = "-v" ] && verbose="1"
+
+echo "TESTS: ${TESTS}"
+
+for test in $tests; do
+	testfile="${test}/test_output.txt"
+	infile="${test}/in.txt"
+	outfile="${test}/out.txt"
+	test_err_file="${test}/test_err.txt"
+	err_file="${test}/err.txt"
+
+	command=$(cat "$infile")
+
+	eval "$command" >"$testfile" 2> "$test_err_file"
+
+ 	diff --strip-trailing-cr "$testfile" "$outfile" >/dev/null
+ 	content_result="$?"
+
+ 	diff --strip-trailing-cr "$test_err_file" "$err_file" >/dev/null
+ 	err_result="$?"
+
+	if [ $content_result -eq 0 ]; then
+	    if [ $err_result -eq 0 ]; then
+		    echo -e "$GREEN$TICK $(basename $test): $command$NOCOLOR"
+		else
+		    echo -e "$RED$CROSS Error input failed $(basename $test): $command$NOCOLOR"
+		fi
+	else
+		echo -e "$RED$CROSS $(basename $test): $command$NOCOLOR"
+		failed='1'
+		if [ $verbose ]; then
+			echo -e "\nExpected output:$DIM"
+			cat "$outfile"
+			echo -e "${NOCOLOR}\nActual output:$DIM"
+			cat "$testfile"
+			echo -e "$NOCOLOR"
+		fi
+	fi
+done
+
+[ $failed ] && [ -z $verbose ] && cat << END
+Some tests failed. Run with -v to see their output.
+You can also check the test case folder to see the actual and expected output files.
+END

@@ -1,1 +1,0 @@
-./tail < file-wrong-long.txt

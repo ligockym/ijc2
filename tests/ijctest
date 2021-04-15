@@ -24,9 +24,17 @@ for test in $tests; do
 	test_err_file="${test}/test_err.txt"
 	err_file="${test}/err.txt"
 
-	command=$(cat "$infile")
+	tail_in="${test}/tail_in.txt"
+	tail_out="${test}/tail_out.txt"
 
+	command=$(cat "$infile")
+	tail_command=$(cat "$tail_in")
+
+    # normal command
 	eval "$command" >"$testfile" 2> "$test_err_file"
+
+	# tail (shell) command
+	eval "$tail_command" >"$tail_out" 2> /dev/null
 
  	diff --strip-trailing-cr "$testfile" "$outfile" >/dev/null
  	content_result="$?"
@@ -34,9 +42,16 @@ for test in $tests; do
  	diff --strip-trailing-cr "$test_err_file" "$err_file" >/dev/null
  	err_result="$?"
 
+ 	diff --strip-trailing-cr "$tail_out" "$outfile" >/dev/null
+    tail_result="$?"
+
 	if [ $content_result -eq 0 ]; then
 	    if [ $err_result -eq 0 ]; then
-		    echo -e "$GREEN$TICK $(basename $test): $command$NOCOLOR"
+	        if [ $tail_result -eq 0 ]; then
+		        echo -e "$GREEN$TICK $(basename $test): $command$NOCOLOR"
+		    else
+		        echo -e "$RED$CROSS Error tail failed $(basename $test): $command$NOCOLOR"
+		    fi
 		else
 		    echo -e "$RED$CROSS Error input failed $(basename $test): $command$NOCOLOR"
 		fi

@@ -8,17 +8,23 @@ all: tail wordcount wordcount-dynamic
 tail: tail.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-wordcount: wordcount.o libhtab.a
 
-wordcount-dynamic: wordcount.o libhtab.so
+wordcount: wordcount.c io.c libhtab.a
+	$(CC) $(CFLAGS) $^ -o $@
+
+wordcount-dynamic: wordcount.c io.c libhtab.so
+	$(CC) $(CFLAGS) $^ -o $@
 
 libhtab.a: $(HTAB_LIBRARY)
 	ar crs $@ $^
 
-%.o: %.c
-	$(CC) $(FLAGS) -c
+libhtab.so: $(HTAB_LIBRARY)
+	$(CC) $(CFLAGS) -shared -fPIC $^ -o $@
+
+%.o : %.c
+	$(CC) $(FLAGS) -c $^
 
 
 .PHONY: clean
 clean:
-	rm -f tail
+	rm -f *.o tail wordcount wordcount-dynamic libhtab.a libhtab.so

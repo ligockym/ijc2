@@ -1,0 +1,1 @@
+Parameter n has to be greater than zero.

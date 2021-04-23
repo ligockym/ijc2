@@ -1,3 +1,9 @@
+/**
+ * io.c
+ * Autor: Marián Ligocký xligoc04
+ * Datum: 23.4.2020
+ */
+
 #include "io.h"
 
 int read_word(char *s, int max, FILE *f) {
@@ -11,7 +17,7 @@ int read_word(char *s, int max, FILE *f) {
             s[max-1] = '\0';
 
             if (isspace(chr) || chr == EOF) {
-                return i+1;
+                return i;
             }
             // keep reading but not saving.
 
@@ -19,7 +25,7 @@ int read_word(char *s, int max, FILE *f) {
             if (isspace(chr) || chr == EOF) {
                 if (word_detected) {
                     s[i] = '\0';
-                    return i + 1;
+                    return i;
                 }
                 // just a regular white space
                 continue;

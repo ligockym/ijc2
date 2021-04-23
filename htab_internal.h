@@ -1,3 +1,9 @@
+/**
+ * htab_internal.h
+ * Autor: Marián Ligocký xligoc04
+ * Datum: 23.4.2020
+ */
+
 #include <stdlib.h>
 #include "htab.h"
 

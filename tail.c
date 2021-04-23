@@ -1,3 +1,9 @@
+/**
+ * tail.c
+ * Autor: Marián Ligocký xligoc04
+ * Datum: 23.4.2020
+ */
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -59,6 +65,7 @@ int main(int argc, char *argv[]) {
             // over limit
             fprintf(stderr, "A row number %i is longer than %i characters. The line is stripped.\n", line_i, LINE_MAX);
             len = LINE_MAX;
+            buffer[LINE_MAX] = '\0';
         }
 
         // Insert line to structure

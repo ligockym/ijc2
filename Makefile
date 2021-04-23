@@ -8,8 +8,7 @@ all: tail wordcount wordcount-dynamic
 tail: tail.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-
-wordcount: wordcount.c io.c libhtab.a
+wordcount: wordcount.c io.c io.h libhtab.a
 	$(CC) $(CFLAGS) $^ -o $@
 
 wordcount-dynamic: wordcount.c io.c libhtab.so

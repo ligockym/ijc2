@@ -1,3 +1,9 @@
+/**
+ * htab_find.c
+ * Autor: Marián Ligocký xligoc04
+ * Datum: 23.4.2020
+ */
+
 #include "htab.h"
 #include "htab_internal.h"
 
